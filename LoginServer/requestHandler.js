@@ -37,7 +37,7 @@ function regist(req, res){
         nickname : req.body.nickname
     };
 
-    console.log('regist : ' + data);
+    console.log('[Server] Request regist : ' + data);
     mysqlDB.regist(res, data);
 
 }
@@ -62,7 +62,7 @@ function login(req, res){
         password : req.body.password
     };
 
-    console.log('login : ' + data.id + ', password : ' + data.password);
+    console.log('[Server] Reqeust login ID : ' + data.id + ', Password : ' + data.password);
     mysqlDB.login(res, data);
 
 }
@@ -73,7 +73,7 @@ function logout(req, res){
         id : req.body.id,
     };
 
-    console.log('login ' + data.id);
+    console.log('[Server] Request logout ' + data.id);
     mysqlDB.logout(res, data);
 
 }

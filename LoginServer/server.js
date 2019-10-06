@@ -26,7 +26,7 @@ function startServer(rule){
     setRouter(app, rule);
 
     http.createServer(app).listen(8000, function(){
-        console.log('Server running..');
+        console.log('[Server] Server running..');
     });
 
 }

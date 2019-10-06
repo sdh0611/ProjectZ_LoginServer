@@ -15,22 +15,36 @@ client.connect(function(error){
 
 
 function regist(res, data){
-    
+    console.log('[Server] In regist.');
     var queryString = "select * from userdb.userinfo where id=?";
     client.query(queryString, data.id, function(error, results){
         if(error){
-            console.log(error);
-            res.send('Query error : ' + error);
+            console.log('[Server] Failed to regist : ' + error);
+            // res.send('Query error : ' + error);
+            res.send('{result : false}');
         }else{ 
+           
             if(results.length > 0){
-                res.send('ID already exist');        
+                // res.send('ID already exist');        
+                console.log('[Server] Failed to regist : ID already exist.');             
+                res.send('{result : false}');        
             }else{
                 queryString = "insert into userdb.userinfo set?";
                 client.query(queryString, data, function(error, results){
                     if(error){
-                        res.send('Failed to create new data : '+error);
+                        console.log('[Server] Failed to regist : ' + error);
+                        // res.send('Failed to create new data : '+error);
+                        res.send('{result : false}');        
                     }else{
-                        res.send('Regist success!!');
+
+                        if(results.affectedRows > 0)
+                        {
+                            res.send('{result : true}');
+                        }else{
+                            console.log('[Server] Failed to regist. ');
+                            res.send('{result : false}');
+                        }
+                        
                     }
             
                 });
@@ -41,43 +55,51 @@ function regist(res, data){
 }
 
 function login(res, data){
-    console.log('In Login');
+    console.log('[Server] In login');
     
     var queryString = "select * from userdb.userinfo where id=? and password=?";
     client.query(queryString, [data.id, data.password], function(error, results){
         console.log(data.id);
         if(error){
-            res.send('Failed to login ' + error);
+            res.send('[Server] Failed to login : ' + error);
         }else{
             console.log(data.id + ", " + data.password);
             if(results.length > 0){
-                var nickname = results[0].nickname;
+                // var nickname = results[0].nickname;
 
-                if(false == results[0].IsConnect){
-                    console.log('Set is connect.');
-                    queryString = "update userinfo set isconnect=true where id=?";
-                    client.query(queryString, [data.id], function(error, results){
-                        if(error){
-                            res.send('{"result" : "false"}');
-                        }else{
-                            var sendData = {
-                                result : "true",
-                                id : data.id,
-                                nickname : nickname
-                            };
-                            res.setHeader('Content-Type', 'application/json');
-                            res.end(JSON.stringify(sendData));
-                        }
+                // if(false == results[0].IsConnect){
+                //     console.log('Set is connect.');
+                //     queryString = "update userinfo set isconnect=true where id=?";
+                //     client.query(queryString, [data.id], function(error, results){
+                //         if(error){
+                //             res.send('{"result" : "false"}');
+                //         }else{
+                //             var sendData = {
+                //                 result : "true",
+                //                 id : data.id,
+                //                 nickname : nickname
+                //             };
+                //             res.setHeader('Content-Type', 'application/json');
+                //             res.end(JSON.stringify(sendData));
+                //         }
+                //     });
 
-                    });
-                }
-                else{
+                    var sendData = {
+                        result : "true",
+                        id : data.id,
+                        nickname : results[0].nickname
+                    };
+                    
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify(sendData));
+                }else{
+                    console.log('[Server] Failed to login. ');
                     res.send('{"result" : "false"}');
                 }
-                
-            }else{
-                res.send('{"result" : "false"}');
-            }
+            
+            // }else{
+            //     res.send('{"result" : "false"}');
+            // }
         }
         
     })
