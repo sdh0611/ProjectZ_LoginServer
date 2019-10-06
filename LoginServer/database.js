@@ -59,11 +59,10 @@ function login(res, data){
     
     var queryString = "select * from userdb.userinfo where id=? and password=?";
     client.query(queryString, [data.id, data.password], function(error, results){
-        console.log(data.id);
         if(error){
             res.send('[Server] Failed to login : ' + error);
         }else{
-            console.log(data.id + ", " + data.password);
+            console.log('[Server] ID : ' + data.id + ", PW : " + data.password);
             if(results.length > 0){
                 // var nickname = results[0].nickname;
 
@@ -111,7 +110,7 @@ function logout(res, data){
     
     var queryString = "update userinfo set isconnect=false where id=?";
     client.query(queryString, [data.id], function(error, results){
-        console.log(data.id);
+        console.log('[Server] ID : ' + data.id);
         if(error){
             res.send('Failed to logout ' + error);
         }else{
