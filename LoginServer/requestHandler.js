@@ -78,6 +78,24 @@ function logout(req, res){
 
 }
 
+function match(req, res){
+    var data = {
+        ip : req.body.ip,
+    };
+
+    console.log('[Server] Request match : ' + data.ip);
+    mysqlDB.match(res, data);
+}
+
+function create(req, res){
+    var data = {
+        ip : req.body.ip,
+    };
+
+    console.log('[Server] Request create game : ' + data.ip);
+    mysqlDB.create(res, data);
+
+}
 
 module.exports = {
     connectDB : connectDB,
@@ -88,5 +106,7 @@ module.exports = {
 
     regist : regist,
     login : login,
-    logout : logout
+    logout : logout,
+    match : match,
+    create : create
 };

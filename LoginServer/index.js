@@ -17,7 +17,9 @@ var rule = [
 
     new RuleCreater('/regist', 'POST', handler.regist),
     new RuleCreater('/login', 'POST', handler.login),
-    new RuleCreater('/logout', 'POST', handler.logout)
+    new RuleCreater('/logout', 'POST', handler.logout),
+    new RuleCreater('/match', 'POST', handler.match),
+    new RuleCreater('/create', 'POST', handler.create),
 ];
 
 

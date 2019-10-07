@@ -68,7 +68,7 @@ function login(res, data){
                 var nickname = results[0].nickname;
 
                 if(false == results[0].isconnect){
-                    console.log('Set is connect.');
+                    console.log('[Server] Set "isconnect" true.');
                     queryString = "update userinfo set isconnect=true where id=?";
                     client.query(queryString, [data.id], function(error, results){
                         if(error){
@@ -111,7 +111,7 @@ function logout(res, data){
     client.query(queryString, [data.id], function(error, results){
         console.log('[Server] ID : ' + data.id);
         if(error){
-            res.send('Failed to logout ' + error);
+            res.send('[Server] Failed to logout ' + error);
         }else{
             console.log(data.id);
             if(results.affectedRows > 0){
@@ -125,8 +125,62 @@ function logout(res, data){
 
 }
 
+function match(res, data){
+    console.log('In match');
+    
+    var queryString = "select isgamestart from userdb.matchgame where ip=?";
+    client.query(queryString, [data.ip], function(error, results){
+        console.log('[Server] IP : ' + data.ip);
+        if(error){
+            res.send('[Server] Failed to match ' + error);
+        }else{
+            console.log(data.ip);
+            if(results.length > 0){
+                if(false == results[0].isgamestart){
+                    res.send('{"result" : "true"}');
+                }else{
+                    console.log('[Server] Game already start..');
+                    res.send('{"result" : "false"}');
+                }
+            }else{
+                res.send('{"result" : "false"}');
+            }
+        }
+        
+    })
+
+}
+
+function create(res, data){
+    console.log('In create game');
+    
+    var queryString = "";
+    client.query(queryString, [data.ip], function(error, results){
+        console.log('[Server] IP : ' + data.ip);
+        if(error){
+            res.send('[Server] Failed to create game ' + error);
+        }else{
+            console.log(data.id);
+            if(results.length > 0){
+                if(false == results[0].isgamestart){
+                    res.send('{"result" : "true"}');
+                }else{
+                    console.log('[Server] Game already start..');
+                    res.send('{"result" : "false"}');
+                }
+            }else{
+                res.send('{"result" : "false"}');
+            }
+        }
+        
+    })
+
+}
+
 module.exports = {
     regist : regist,
     login : login,
-    logout : logout
+    logout : logout,
+    match : match,
+    create : create
 };
