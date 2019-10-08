@@ -78,22 +78,45 @@ function logout(req, res){
 
 }
 
-function match(req, res){
+
+function matchGame(req, res){
     var data = {
         ip : req.body.ip,
     };
 
     console.log('[Server] Request match : ' + data.ip);
-    mysqlDB.match(res, data);
+    mysqlDB.matchGame(res, data);
 }
 
-function create(req, res){
+function createGame(req, res){
+    var data = {
+        ip : req.body.ip,
+        CanJoin : false
+    };
+
+    console.log('[Server] Request create game : ' + data.ip);
+    mysqlDB.createGame(res, data);
+
+}
+
+function deleteGame(req, res){
+    var data = {
+        ip : req.body.ip,
+    };
+
+    console.log('[Server] Request delete game : ' + data.ip);
+    mysqlDB.deleteGame(res, data);
+
+}
+
+
+function startGame(req, res){
     var data = {
         ip : req.body.ip,
     };
 
     console.log('[Server] Request create game : ' + data.ip);
-    mysqlDB.create(res, data);
+    mysqlDB.startGame(res, data);
 
 }
 
@@ -107,6 +130,8 @@ module.exports = {
     regist : regist,
     login : login,
     logout : logout,
-    match : match,
-    create : create
+    matchGame : matchGame,
+    createGame : createGame,
+    deleteGame : deleteGame,
+    startGame : startGame
 };

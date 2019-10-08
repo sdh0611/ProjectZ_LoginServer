@@ -18,8 +18,10 @@ var rule = [
     new RuleCreater('/regist', 'POST', handler.regist),
     new RuleCreater('/login', 'POST', handler.login),
     new RuleCreater('/logout', 'POST', handler.logout),
-    new RuleCreater('/match', 'POST', handler.match),
-    new RuleCreater('/create', 'POST', handler.create),
+    new RuleCreater('/match_game', 'POST', handler.matchGame),
+    new RuleCreater('/create_game', 'POST', handler.createGame),
+    new RuleCreater('/delete_game', 'POST', handler.deleteGame),
+    new RuleCreater('/start_game', 'POST', handler.startGame),
 ];
 
 

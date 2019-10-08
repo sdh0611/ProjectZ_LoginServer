@@ -93,11 +93,12 @@ function login(res, data){
 
                 }else{
                     console.log('[Server] Failed to login : already login. ');
-                    res.send('{"result" : "false"}');
+                    res.send('{"result" : "false", "reason" : "이미 로그인 되어있습니다."}');
                 }
             
             }else{
-                res.send('{"result" : "false"}');
+                console.log('[Server] Failed to login : not exist. ');
+                res.send('{"result" : "false", "reason" : "일치하는 정보가 없습니다."}');
             }
         }        
     });
@@ -125,25 +126,32 @@ function logout(res, data){
 
 }
 
-function match(res, data){
+function matchGame(res, data){
     console.log('In match');
     
-    var queryString = "select isgamestart from userdb.matchgame where ip=?";
+    var queryString = "select CanJoin from userdb.matchgame where ip=?";
     client.query(queryString, [data.ip], function(error, results){
         console.log('[Server] IP : ' + data.ip);
         if(error){
-            res.send('[Server] Failed to match ' + error);
+            console.log('[Server] Failed to match ' + error);
         }else{
             console.log(data.ip);
             if(results.length > 0){
-                if(false == results[0].isgamestart){
-                    res.send('{"result" : "true"}');
+                if(false == results[0].CanJoin){
+                    console.log('[Server] : Success to match game!!');
+                    var sendData={
+                        result : "true",
+                        ip : data.ip
+                    };
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify(sendData));
                 }else{
                     console.log('[Server] Game already start..');
-                    res.send('{"result" : "false"}');
+                    res.send('{"result" : "false", "reason" : "이미 시작된 게임입니다."}');
                 }
             }else{
-                res.send('{"result" : "false"}');
+                console.log('[Server] : Game not exist..');
+                res.send('{"result" : "false", "reason" : "존재하지 않는 게임입니다."}');
             }
         }
         
@@ -151,23 +159,66 @@ function match(res, data){
 
 }
 
-function create(res, data){
+function createGame(res, data){
     console.log('In create game');
     
-    var queryString = "";
+    var queryString = "insert into userdb.matchgame set?";
+    client.query(queryString, data, function(error, results){
+        console.log('[Server] IP : ' + data.ip);
+        if(error){
+            console.log('[Server] Failed to create game ' + error);
+            res.send('{"result" : "false"}');
+        }else{
+            console.log(data.ip);
+            if(results.affectedRows > 0){
+                console.log('[Server] : Success create game!!');
+                res.send('{"result" : "true"}');
+            }else{
+                console.log('[Server] : Failed to create game..');
+                res.send('{"result" : "false"}');
+            }
+        }
+        
+    })
+}
+
+function deleteGame(res, data){
+    console.log('In delete game');
+    
+    var queryString = "delete from userdb.matchgame where IP=?";
     client.query(queryString, [data.ip], function(error, results){
         console.log('[Server] IP : ' + data.ip);
         if(error){
-            res.send('[Server] Failed to create game ' + error);
+            console.log('[Server] Failed to delete game ' + error);
+            res.send('{"result" : "false"}');
         }else{
-            console.log(data.id);
-            if(results.length > 0){
-                if(false == results[0].isgamestart){
-                    res.send('{"result" : "true"}');
-                }else{
-                    console.log('[Server] Game already start..');
-                    res.send('{"result" : "false"}');
-                }
+            console.log(data.ip);
+            if(results.affectedRows > 0){
+                console.log('[Server] Delete game success!!');
+                res.send('{"result" : "true"}');
+            }else{
+                console.log('[Server] Failed to delete game..');
+                res.send('{"result" : "false"}');
+            }
+
+        }
+        
+    })
+}
+
+function startGame(res, data){
+    console.log('In start game');
+    
+    var queryString = "update userdb.matchgame set CanJoin=true where IP=?";
+    client.query(queryString, [data.ip], function(error, results){
+        console.log('[Server] IP : ' + data.ip);
+        if(error){
+            console.log('[Server] Failed to start game ' + error);
+            res.send('{"result" : "false"}');
+        }else{
+            console.log(data.ip);
+            if(results.affectedRows > 0){
+                res.send('{"result" : "true"}');
             }else{
                 res.send('{"result" : "false"}');
             }
@@ -181,6 +232,8 @@ module.exports = {
     regist : regist,
     login : login,
     logout : logout,
-    match : match,
-    create : create
+    matchGame : matchGame,
+    createGame : createGame,
+    deleteGame : deleteGame,
+    startGame : startGame
 };
