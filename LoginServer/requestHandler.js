@@ -1,4 +1,5 @@
 var fs = require('fs');
+var gameLift = require('./gameLift');
 
 var mysqlDB;
 
@@ -6,15 +7,12 @@ function connectDB(database){
     mysqlDB = database;
 }
 
-
-
 function start(req, res){
 
     console.log('start');
     res.redirect('/login');
 
 }
-
 
 // regist
 function showRegistForm(req, res){
@@ -84,7 +82,7 @@ function matchGame(req, res){
         ip : req.body.ip,
     };
 
-    console.log('[Server] Request match : ' + data.ip);
+    console.log('[Server] Request match game');
     mysqlDB.matchGame(res, data);
 }
 
@@ -94,7 +92,7 @@ function createGame(req, res){
         CanJoin : false
     };
 
-    console.log('[Server] Request create game : ' + data.ip);
+    console.log('[Server] Request create game');
     mysqlDB.createGame(res, data);
 
 }
@@ -104,7 +102,7 @@ function deleteGame(req, res){
         ip : req.body.ip,
     };
 
-    console.log('[Server] Request delete game : ' + data.ip);
+    console.log('[Server] Request delete game');
     mysqlDB.deleteGame(res, data);
 
 }
@@ -115,10 +113,33 @@ function startGame(req, res){
         ip : req.body.ip,
     };
 
-    console.log('[Server] Request create game : ' + data.ip);
+    console.log('[Server] Request create game');
     mysqlDB.startGame(res, data);
 
 }
+
+function createGameSession(req, res){
+    console.log('[Server] Create session.');
+    gameLift.createGameSession(req, res);
+}
+
+function describeGameSession(req, res){
+    console.log('[Server] Describe game session.');
+    gameLift.describeGameSession(req, res);
+}
+
+function createPlayerSession(req, res){
+    console.log('[Server] Create player session.');
+    gameLift.createPlayerSession(req, res);
+}
+
+function searchGameSessions(req, res){
+    console.log('[Server] Search game sessions.');
+    gameLift.searchGameSessions(req, res);
+}
+
+
+
 
 module.exports = {
     connectDB : connectDB,
@@ -133,5 +154,10 @@ module.exports = {
     matchGame : matchGame,
     createGame : createGame,
     deleteGame : deleteGame,
-    startGame : startGame
+    startGame : startGame,
+
+    createGameSession : createGameSession,
+    describeGameSession : describeGameSession,
+    createPlayerSession : createPlayerSession,
+    searchGameSessions : searchGameSessions
 };

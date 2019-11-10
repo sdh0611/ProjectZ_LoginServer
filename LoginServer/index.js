@@ -22,6 +22,10 @@ var rule = [
     new RuleCreater('/create_game', 'POST', handler.createGame),
     new RuleCreater('/delete_game', 'POST', handler.deleteGame),
     new RuleCreater('/start_game', 'POST', handler.startGame),
+    new RuleCreater('/create_game_session', 'POST', handler.createGameSession),
+    new RuleCreater('/describe_game_session', 'POST', handler.describeGameSession),
+    new RuleCreater('/create_player_session', 'POST', handler.createPlayerSession),
+    new RuleCreater('/search_game_sessions', 'POST', handler.searchGameSessions),
 ];
 
 

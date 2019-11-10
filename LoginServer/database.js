@@ -106,7 +106,7 @@ function login(res, data){
 }
 
 function logout(res, data){
-    console.log('In Logout');
+    console.log('[Server] In logout');
     
     var queryString = "update userinfo set isconnect=false where id=?";
     client.query(queryString, [data.id], function(error, results){
@@ -127,15 +127,15 @@ function logout(res, data){
 }
 
 function matchGame(res, data){
-    console.log('In match');
+    console.log('[Server] In match game');
     
     var queryString = "select CanJoin from userdb.matchgame where ip=?";
     client.query(queryString, [data.ip], function(error, results){
-        console.log('[Server] IP : ' + data.ip);
+        // console.log('[Server] IP : ' + data.ip);
         if(error){
             console.log('[Server] Failed to match ' + error);
         }else{
-            console.log(data.ip);
+            // console.log(data.ip);
             if(results.length > 0){
                 if(false == results[0].CanJoin){
                     console.log('[Server] : Success to match game!!');
@@ -160,16 +160,16 @@ function matchGame(res, data){
 }
 
 function createGame(res, data){
-    console.log('In create game');
+    console.log('[Server] In create game');
     
     var queryString = "insert into userdb.matchgame set?";
     client.query(queryString, data, function(error, results){
-        console.log('[Server] IP : ' + data.ip);
+        // console.log('[Server] IP : ' + data.ip);
         if(error){
             console.log('[Server] Failed to create game ' + error);
             res.send('{"result" : "false"}');
         }else{
-            console.log(data.ip);
+            // console.log(data.ip);
             if(results.affectedRows > 0){
                 console.log('[Server] : Success create game!!');
                 res.send('{"result" : "true"}');
@@ -183,16 +183,16 @@ function createGame(res, data){
 }
 
 function deleteGame(res, data){
-    console.log('In delete game');
+    console.log('[Server] In delete game');
     
     var queryString = "delete from userdb.matchgame where IP=?";
     client.query(queryString, [data.ip], function(error, results){
-        console.log('[Server] IP : ' + data.ip);
+        // console.log('[Server] IP : ' + data.ip);
         if(error){
             console.log('[Server] Failed to delete game ' + error);
             res.send('{"result" : "false"}');
         }else{
-            console.log(data.ip);
+            // console.log(data.ip);
             if(results.affectedRows > 0){
                 console.log('[Server] Delete game success!!');
                 res.send('{"result" : "true"}');
@@ -207,7 +207,7 @@ function deleteGame(res, data){
 }
 
 function startGame(res, data){
-    console.log('In start game');
+    console.log('[Server] In start game');
     
     var queryString = "update userdb.matchgame set CanJoin=true where IP=?";
     client.query(queryString, [data.ip], function(error, results){
@@ -216,7 +216,7 @@ function startGame(res, data){
             console.log('[Server] Failed to start game ' + error);
             res.send('{"result" : "false"}');
         }else{
-            console.log(data.ip);
+            // console.log(data.ip);
             if(results.affectedRows > 0){
                 res.send('{"result" : "true"}');
             }else{
