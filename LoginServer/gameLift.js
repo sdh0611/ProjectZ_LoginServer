@@ -33,8 +33,7 @@ function createGameSession(req, res){
         }else{
             var sendData = {
                 result : "true",
-                test : 1,
-                sessionID : data.GameSessionId
+                sessionID : data.GameSession.GameSessionId
             };
             console.log('[Server] Create game session response data : ' + sendData.sessionID);
             res.send(sendData);
@@ -48,7 +47,7 @@ function createGameSession(req, res){
 function describeGameSession(req, res){
     
     var params = {
-        SessionID : req.body.sessionID
+        GameSessionId : req.body.sessionID
     };
 
     gameLift.describeGameSessionDetails(params, function(err, data){
@@ -59,8 +58,8 @@ function describeGameSession(req, res){
         }else{
             var sendData = {
                 result : "true",
-                sessionID : data.GameSessionId,
-                status : data.Status
+                sessionID : data.GameSessionDetails.GameSessionId,
+                status : data.GameSessionDetails.Status
             };
             console.log('[Server] Describe game session response data : ' + sendData);
             res.send(sendData);
@@ -75,9 +74,11 @@ function describeGameSession(req, res){
 function createPlayerSession(req, res){
 
     var params = {
-        SessionID : req.body.sessionID,
-        PlayerID : req.body.playerID
+        GameSessionId : req.body.sessionID,
+        PlayerId : req.body.playerID
     };
+
+    console.log(params.PlayerId);
 
     gameLift.createPlayerSession(params, function(err, data){
 
@@ -87,10 +88,10 @@ function createPlayerSession(req, res){
         }else{
             var sendData = {
                 result : "true",
-                status : data.Status,
-                playerSessionID : data.PlayerSessionId,
-                ipAddress : data.IpAddress,
-                port : data.Port
+                status : data.PlayerSession.Status,
+                playerSessionID : data.PlayerSession.PlayerSessionId,
+                ipAddress : data.PlayerSession.IpAddress,
+                port : data.PlayerSession.Port
             };
             console.log('[Server] Create player session response data : ' + sendData);
             res.send(sendData);
