@@ -93,6 +93,7 @@ function createPlayerSession(req, res){
                 ipAddress : data.PlayerSession.IpAddress,
                 port : data.PlayerSession.Port
             };
+            
             console.log('[Server] Create player session response data : ' + sendData);
             res.send(sendData);
 
