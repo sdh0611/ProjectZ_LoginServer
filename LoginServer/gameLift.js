@@ -1,7 +1,8 @@
 var AWS = require('aws-sdk');
 AWS.config.update({
-    accessKeyId : "AKIAUMWLOZXE76SNKF6E",
-    secretAccessKey : "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",
+    // 테스트할 때 AWS에서 직접 가져와서 입력할 것.
+    accessKeyId : "",
+    secretAccessKey : "",
     region : "ap-northeast-2"
 });
 
