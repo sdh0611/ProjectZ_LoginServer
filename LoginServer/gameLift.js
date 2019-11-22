@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 AWS.config.update({
-    accessKeyId : "AKIAUMWLOZXE76SNKF6E",
-    secretAccessKey : "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",
+    accessKeyId : "",
+    secretAccessKey : "",
     region : "ap-northeast-2"
 });
 
@@ -11,7 +11,7 @@ AWS.config.update({
 // var gameLift = new AWS.GameLift({endpoint : "http://127.0.0.1:9080"});
 var gameLift = new AWS.GameLift({endpoint : "https://gamelift.ap-northeast-2.amazonaws.com"});
 
-var gameLiftAliasID = 'alias-9b184028-58a4-4eb6-8e1f-ced586e28920';
+var gameLiftAliasID = '';
 var gameLiftFleetID = 'fleet-123';
 
 
@@ -63,8 +63,6 @@ function describeGameSession(req, res){
             };
             console.log('[Server] Describe game session response data : ' + sendData.sessionID);
             res.send(sendData);
-            // res.setHeader('Content-Type', 'application/json');
-            // res.end(JSON.stringify(sendData));
         }
 
     });
@@ -96,9 +94,6 @@ function createPlayerSession(req, res){
 
             console.log('[Server] Create player session response data : ' + sendData);
             res.send(sendData);
-
-            // res.setHeader('Content-Type', 'application/json');
-            // res.end(JSON.stringify(sendData));
         }
 
     });
@@ -131,12 +126,14 @@ function searchGameSessions(req, res){
             
             // Data 가공
             data.GameSessions.forEach(function(item){
-                sendData.SessionInfos.push({
-                    SessionID : item.GameSessionId, 
-                    SessionName : item.Name,
-                    MaxConnection : item.MaximumPlayerSessionCount,
-                    CurrentConnection : item.CurrentPlayerSessionCount
-                });
+                if(item.PlayerSessionCreationPolicy != 'DENY_ALL'){                
+                    sendData.SessionInfos.push({
+                        SessionID : item.GameSessionId, 
+                        SessionName : item.Name,
+                        MaxConnection : item.MaximumPlayerSessionCount,
+                        CurrentConnection : item.CurrentPlayerSessionCount
+                    });
+                }
             });
 
             console.log('[Server] Search game sessions response data : ' + sendData.SessionInfos.length);
@@ -147,6 +144,8 @@ function searchGameSessions(req, res){
 
 
 }
+
+
 
 module.exports = {
     createGameSession : createGameSession,
